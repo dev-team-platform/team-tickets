@@ -1,0 +1,66 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.tt-not-found {
+  box-sizing: border-box;
+  display: grid;
+  height: 100%;
+  place-items: center;
+  padding: var(--tp-space-8);
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--tp-space-4);
+    width: 100%;
+    max-width: 32rem;
+    text-align: center;
+  }
+
+  &__summary {
+    display: flex;
+    align-items: center;
+    gap: var(--tp-space-3);
+  }
+
+  &__icon {
+    --tp-icon-size: 6rem;
+
+    color: var(--tp-color-blue-500);
+  }
+
+  &__title {
+    margin: 0;
+    color: var(--tp-color-text-primary);
+    font-size: var(--tp-text-5xl);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  &__description {
+    max-width: 30rem;
+    margin: 0;
+    color: var(--tp-color-text-secondary);
+    font-size: var(--tp-text-xl);
+    line-height: 1.5;
+  }
+
+  &__home-button {
+    align-self: center;
+    margin-top: var(--tp-space-2);
+
+    :host ::ng-deep & .mdc-button__label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--tp-space-2);
+    }
+  }
+}
+
+:host ::ng-deep .tt-not-found__home-button .tp-icon {
+  margin-top: -1px;
+}

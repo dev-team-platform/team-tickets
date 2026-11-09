@@ -1,0 +1,62 @@
+@if (currentUser() !== null) {
+  <tp-popover-menu
+    [(open)]="open"
+    [origin]="origin()"
+    ariaLabel="User account menu"
+    position="bottom-end"
+    width="270px"
+    maxWidth="min(90vw, 360px)"
+  >
+    <div class="tt-user-account-menu__content">
+      <div class="tt-user-account-menu__identity">
+        <p class="tt-user-account-menu__display-name">
+          {{ currentUser()?.displayName || 'Account' }}
+        </p>
+        <p class="tt-user-account-menu__username">{{ currentUser()?.username ?? '' }}</p>
+      </div>
+
+      <tp-divider></tp-divider>
+
+      <nav class="tt-user-account-menu__actions" aria-label="Account actions">
+        <tp-text-button
+          color="black"
+          fontWeight="400"
+          pressEffectShape="rect"
+          contentAlignment="start"
+          [fullWidth]="true"
+          height="40px"
+          (onClick)="navigateTo('/settings/edit-profile')"
+        >
+          <span class="tp-icon material-symbols-outlined" aria-hidden="true">person_edit</span>
+          <span>Edit profile</span>
+        </tp-text-button>
+
+        <tp-text-button
+          color="black"
+          fontWeight="400"
+          pressEffectShape="rect"
+          contentAlignment="start"
+          [fullWidth]="true"
+          height="40px"
+          (onClick)="navigateTo('/settings/change-password')"
+        >
+          <span class="tp-icon material-symbols-outlined" aria-hidden="true">lock</span>
+          <span>Change password</span>
+        </tp-text-button>
+
+        <tp-text-button
+          color="black"
+          fontWeight="400"
+          pressEffectShape="rect"
+          contentAlignment="start"
+          [fullWidth]="true"
+          height="40px"
+          (onClick)="logout()"
+        >
+          <span class="tp-icon material-symbols-outlined" aria-hidden="true">logout</span>
+          <span>Logout</span>
+        </tp-text-button>
+      </nav>
+    </div>
+  </tp-popover-menu>
+}

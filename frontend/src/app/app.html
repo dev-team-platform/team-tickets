@@ -1,21 +1,14 @@
-<div>
-  <div *appHasAccess="hasAccess()">You have access to this content.</div>
+<div class="tt-app-shell">
+  <app-app-layout></app-app-layout>
 
-  <!-- <div style="margin-top: 10px">
-    <app-bell-notification [count]="1" tooltipTitle="Open notifications"></app-bell-notification>
-  </div>
+  <tp-toast-notification-container
+    position="top-right"
+    pushMode="below"
+    toastDisplayMode="from-right"
+    [(toasts)]="toastService.toasts"
+  ></tp-toast-notification-container>
+</div>
 
-  <app-card class="custom-card" width="200px" height="100px">
-    <div style="padding: 5px">Card content</div>
-  </app-card>
-
-  <app-dialog class="top-right-dialog" title="Notifications"> Dialog content </app-dialog>
-
-  <div class="skeleton-demo">
-    <app-skeleton variant="circle"></app-skeleton>
-    <app-skeleton variant="text" width="240px"></app-skeleton>
-    <app-skeleton variant="rectangle" width="320px" height="140px"></app-skeleton>
-  </div> -->
-
-  <app-button variant="filled" size="sm">Click me</app-button>
+<div class="tt-screen-size-message" role="status" aria-live="polite">
+  Please use desktop or laptop for full view
 </div>

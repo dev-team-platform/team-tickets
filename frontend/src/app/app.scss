@@ -1,18 +1,30 @@
-.custom-card {
-  --tt-card-position: absolute;
-  --tt-card-top: 50px;
-  --tt-card-right: 50px;
+:host {
+  display: block;
+  min-height: 100vh;
 }
 
-.top-right-dialog {
-  --tt-dialog-position: fixed;
-  --tt-dialog-top: 24px;
-  --tt-dialog-right: 24px;
+.tt-app-shell {
+  min-height: 100vh;
 }
 
-.skeleton-demo {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin: 24px;
+.tt-screen-size-message {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  top: 16px;
+  left: 16px;
+  margin: 0;
+  color: var(--tp-color-text-primary);
+  font-size: var(--tp-font-size-default);
+  line-height: 1.5;
+}
+
+@media (max-width: 1023.98px) {
+  .tt-app-shell {
+    display: none;
+  }
+
+  .tt-screen-size-message {
+    display: block;
+  }
 }

@@ -1,0 +1,83 @@
+@if (currentUser() !== null) {
+  <aside class="tt-side-bar" aria-label="Primary navigation">
+    <nav class="tt-side-bar__nav" aria-label="Main menu">
+      @for (item of navigationItems(); track item.label) {
+        @if (item.type === 'navigate') {
+          <a
+            *appHasAccess="item.hasAccess"
+            class="tt-side-bar__nav-item"
+            [attr.aria-label]="item.label"
+            [routerLink]="item.route"
+            routerLinkActive="tt-side-bar__nav-item--active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            [matTooltip]="item.label"
+            matTooltipClass="tt-side-bar__tooltip"
+            [matTooltipDisabled]="!collapsed()"
+            matTooltipPosition="right"
+          >
+            <span class="material-symbols-outlined" aria-hidden="true">{{ item.icon }}</span>
+            @if (!collapsed()) {
+              <span>{{ item.label }}</span>
+            }
+          </a>
+        } @else {
+          <div
+            class="tt-side-bar__dropdown"
+            [class.tt-side-bar__dropdown--active]="collapsed() && isDropdownActive(item)"
+          >
+            <tp-text-button
+              *appHasAccess="item.hasAccess"
+              class="tt-side-bar__nav-item tt-side-bar__dropdown-button"
+              color="gray"
+              pressEffectShape="rect"
+              height="48px"
+              [attr.aria-label]="item.label"
+              [attr.aria-expanded]="!collapsed() && isDropdownExpanded(item)"
+              [fullWidth]="true"
+              [matTooltip]="item.label"
+              matTooltipClass="tt-side-bar__tooltip"
+              [matTooltipDisabled]="!collapsed()"
+              matTooltipPosition="right"
+              (onClick)="handleDropdownClick(item)"
+            >
+              <span class="material-symbols-outlined" aria-hidden="true">{{ item.icon }}</span>
+              @if (!collapsed()) {
+                <span>{{ item.label }}</span>
+                <span
+                  class="material-symbols-outlined tt-side-bar__dropdown-icon"
+                  aria-hidden="true"
+                >
+                  {{ isDropdownExpanded(item) ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+                </span>
+              }
+            </tp-text-button>
+
+            @if (!collapsed() && isDropdownExpanded(item)) {
+              <div class="tt-side-bar__children">
+                @for (child of item.children; track child.label) {
+                  <a
+                    *appHasAccess="child.hasAccess"
+                    class="tt-side-bar__nav-item tt-side-bar__nav-item--child"
+                    [attr.aria-label]="child.label"
+                    [routerLink]="child.route"
+                    routerLinkActive="tt-side-bar__nav-item--active"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    [matTooltip]="child.label"
+                    matTooltipClass="tt-side-bar__tooltip"
+                    [matTooltipDisabled]="!collapsed()"
+                    matTooltipPosition="right"
+                  >
+                    <span class="material-symbols-outlined" aria-hidden="true">{{
+                      child.icon
+                    }}</span>
+                    <span>{{ child.label }}</span>
+                  </a>
+                }
+              </div>
+            }
+          </div>
+        }
+      }
+    </nav>
+  </aside>
+}

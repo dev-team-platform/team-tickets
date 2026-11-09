@@ -1,0 +1,76 @@
+<header class="tt-nav-bar">
+  <div class="tt-nav-bar__start">
+    <tp-text-button
+      class="tt-nav-bar__collapse-button"
+      [attr.aria-label]="sideBarCollapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
+      color="gray"
+      pressEffectShape="circle"
+      width="40px"
+      height="40px"
+      [tooltipTitle]="sideBarCollapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
+      (onClick)="sideBarToggle.emit()"
+    >
+      <span class="tp-icon material-symbols-outlined" aria-hidden="true">
+        {{ sideBarCollapsed() ? 'left_panel_open' : 'left_panel_close' }}
+      </span>
+    </tp-text-button>
+
+    <a class="tt-nav-bar__brand" href="/" aria-label="Team Organization home">
+      <img class="tt-nav-bar__logo" src="/logo.png" alt="" height="32" width="32" />
+      <span class="tt-nav-bar__name">Team Tickets</span>
+    </a>
+
+    <div class="tt-nav-bar__search">
+      <tp-search-bar
+        placeholder="Search tickets, projects, and people"
+        ariaLabel="Search Team Tickets"
+        maxWidth="640px"
+      ></tp-search-bar>
+    </div>
+
+    <tp-button
+      class="tt-nav-bar__create-button"
+      color="blue"
+      variant="filled"
+      width="140px"
+      height="37px"
+    >
+      <span class="tp-icon" aria-hidden="true">add</span>
+      <span>Create ticket</span>
+    </tp-button>
+  </div>
+
+  <div class="tt-nav-bar__actions">
+    <tp-bell-notification
+      cdkOverlayOrigin
+      #bellNotificationMenuOrigin="cdkOverlayOrigin"
+      [count]="unreadCount()"
+      (onClick)="toggleBellNotificationMenu()"
+    ></tp-bell-notification>
+    <tp-avatar
+      cdkOverlayOrigin
+      #userAccountMenuOrigin="cdkOverlayOrigin"
+      alt="Open user menu"
+      tooltipTitle="Account menu"
+      [size]="40"
+      (onClick)="toggleUserAccountMenu()"
+    ></tp-avatar>
+  </div>
+</header>
+
+<app-bell-notification-menu
+  [(open)]="isBellNotificationMenuOpen"
+  [origin]="bellNotificationMenuOrigin"
+  [notifications]="visibleNotifications()"
+  [loading]="isLoadingNotifications()"
+  [(isUnreadOnly)]="isUnreadOnly"
+  (isUnreadOnlyChange)="loadNotifications($event)"
+  [markAllReadDisabled]="isMarkingAllNotificationsRead()"
+  (markAsRead)="scheduleMarkNotificationRead($event)"
+  (markAllRead)="markAllNotificationsRead()"
+></app-bell-notification-menu>
+
+<app-user-account-menu
+  [(open)]="isUserAccountMenuOpen"
+  [origin]="userAccountMenuOrigin"
+></app-user-account-menu>

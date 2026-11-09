@@ -1,0 +1,57 @@
+@if (showInitialSkeleton()) {
+  <div
+    class="tt-app-layout-skeleton"
+    role="status"
+    aria-label="Loading application"
+    aria-busy="true"
+  >
+    <header class="tt-app-layout-skeleton__navbar" aria-hidden="true">
+      <div class="tt-app-layout-skeleton__navbar-start">
+        <tp-skeleton variant="circle" width="40px" height="40px"></tp-skeleton>
+        <tp-skeleton variant="circle" width="32px" height="32px"></tp-skeleton>
+        <tp-skeleton variant="text" width="168px" height="18px"></tp-skeleton>
+      </div>
+
+      <div class="tt-app-layout-skeleton__navbar-actions">
+        <tp-skeleton variant="circle" width="40px" height="40px"></tp-skeleton>
+        <tp-skeleton variant="circle" width="40px" height="40px"></tp-skeleton>
+      </div>
+    </header>
+
+    <div class="tt-app-layout-skeleton__workspace">
+      <aside class="tt-app-layout-skeleton__sidebar" aria-hidden="true">
+        <nav class="tt-app-layout-skeleton__sidebar-items">
+          @for (item of sideBarSkeletonItems; track $index) {
+            <div
+              class="tt-app-layout-skeleton__sidebar-item"
+              [class.tt-app-layout-skeleton__sidebar-item--child]="item.child"
+            >
+              <tp-skeleton variant="text" [width]="item.width" height="14px"></tp-skeleton>
+            </div>
+          }
+        </nav>
+      </aside>
+
+      <main class="tt-app-layout-skeleton__main">
+        <app-main-skeleton></app-main-skeleton>
+      </main>
+    </div>
+  </div>
+} @else {
+  <app-nav-bar
+    [sideBarCollapsed]="sideBarCollapsed()"
+    (sideBarToggle)="toggleSideBar()"
+  ></app-nav-bar>
+
+  <div class="tt-app-shell">
+    <app-side-bar
+      [collapsed]="sideBarCollapsed()"
+      (expandRequested)="expandSideBar()"
+    ></app-side-bar>
+
+    <main class="tt-app-shell__content">
+      <app-breadcrumb></app-breadcrumb>
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+}
