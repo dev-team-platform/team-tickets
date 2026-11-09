@@ -3,47 +3,46 @@ package configs
 import (
 	"fmt"
 	"os"
-	"strconv"
 )
 
 type DBConfig struct {
-	Host            string
-	Port            string
-	User            string
-	Password        string
-	Name            string
-	SSLMode         string
-	MaxOpenConns    int
-	MaxIdleConns    int
-	ConnMaxLifetime int
+	Host, User, Password, Name, SSLMode         string
+	Port                                        int
+	MaxOpenConns, MaxIdleConns, ConnMaxLifetime int
 }
 
-func LoadDBConfig() (*DBConfig, error) {
-
-	maxOpenConns, err := strconv.Atoi(os.Getenv("DB_MAX_OPEN_CONNS"))
+func loadDBConfig() (DBConfig, error) {
+	port, err := portEnv("DB_PORT", 0)
 	if err != nil {
-		return nil, fmt.Errorf("invalid DB_MAX_OPEN_CONNS: %w", err)
+		return DBConfig{}, err
 	}
-
-	maxIdleConns, err := strconv.Atoi(os.Getenv("DB_MAX_IDLE_CONNS"))
+	maxOpen, err := intEnv("DB_MAX_OPEN_CONNS", 10)
 	if err != nil {
-		return nil, fmt.Errorf("invalid DB_MAX_IDLE_CONNS: %w", err)
+		return DBConfig{}, err
 	}
-
-	connMaxLifetime, err := strconv.Atoi(os.Getenv("DB_CONN_MAX_LIFETIME"))
+	maxIdle, err := intEnv("DB_MAX_IDLE_CONNS", 5)
 	if err != nil {
-		return nil, fmt.Errorf("invalid DB_CONN_MAX_LIFETIME: %w", err)
+		return DBConfig{}, err
 	}
-
-	return &DBConfig{
+	lifetime, err := intEnv("DB_CONN_MAX_LIFETIME", 300)
+	if err != nil {
+		return DBConfig{}, err
+	}
+	if os.Getenv("DB_HOST") == "" || os.Getenv("DB_USER") == "" || os.Getenv("DB_NAME") == "" {
+		return DBConfig{}, fmt.Errorf("DB_HOST, DB_USER, and DB_NAME are required")
+	}
+	if maxOpen < 0 || maxIdle < 0 || lifetime < 0 {
+		return DBConfig{}, fmt.Errorf("DB_MAX_OPEN_CONNS, DB_MAX_IDLE_CONNS, and DB_CONN_MAX_LIFETIME cannot be negative")
+	}
+	return DBConfig{
 		Host:            os.Getenv("DB_HOST"),
-		Port:            os.Getenv("DB_PORT"),
+		Port:            port,
 		User:            os.Getenv("DB_USER"),
 		Password:        os.Getenv("DB_PASSWORD"),
 		Name:            os.Getenv("DB_NAME"),
 		SSLMode:         os.Getenv("DB_SSL_MODE"),
-		MaxOpenConns:    maxOpenConns,
-		MaxIdleConns:    maxIdleConns,
-		ConnMaxLifetime: connMaxLifetime,
+		MaxOpenConns:    maxOpen,
+		MaxIdleConns:    maxIdle,
+		ConnMaxLifetime: lifetime,
 	}, nil
 }
