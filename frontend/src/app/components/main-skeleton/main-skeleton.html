@@ -1,0 +1,39 @@
+<section class="tt-main-skeleton" role="status" aria-label="Loading page" aria-busy="true">
+  <div class="tt-main-skeleton__heading">
+    <tp-skeleton variant="text" width="180px" height="18px"></tp-skeleton>
+
+    <div class="tt-main-skeleton__features" aria-hidden="true">
+      @for (feature of featureActions; track feature) {
+        <tp-skeleton variant="circle" width="36px" height="36px"></tp-skeleton>
+      }
+    </div>
+  </div>
+
+  <div class="tt-main-skeleton__intro" aria-hidden="true">
+    <tp-skeleton variant="text" width="64%" height="20px"></tp-skeleton>
+    <tp-skeleton variant="text" width="42%" height="16px"></tp-skeleton>
+  </div>
+
+  <tp-skeleton
+    class="tt-main-skeleton__table-block"
+    variant="rectangle"
+    width="100%"
+    height="220px"
+  ></tp-skeleton>
+
+  <div class="tt-main-skeleton__filters" aria-hidden="true">
+    @for (filter of tableFilters; track filter) {
+      <tp-skeleton variant="rectangle" width="calc((100% - 36px) / 4)" height="36px"></tp-skeleton>
+    }
+  </div>
+
+  <div class="tt-main-skeleton__rows" aria-hidden="true">
+    @for (row of tableRows; track $index) {
+      <div class="tt-main-skeleton__row">
+        @for (width of row; track $index) {
+          <tp-skeleton variant="text" [width]="width" height="12px"></tp-skeleton>
+        }
+      </div>
+    }
+  </div>
+</section>

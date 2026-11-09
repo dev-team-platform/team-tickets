@@ -1,0 +1,122 @@
+<tp-popover-menu
+  [(open)]="open"
+  [origin]="origin()"
+  ariaLabel="Notifications"
+  position="bottom-end"
+  width="min(420px, 90vw)"
+  maxWidth="min(420px, 90vw)"
+  maxHeight="min(600px, 80vh)"
+>
+  <div class="tt-bell-notification-menu">
+    <header class="tt-bell-notification-menu__header">
+      <h2>Notifications</h2>
+      <tp-slide-toggle
+        class="tt-bell-notification-menu__unread-toggle"
+        ariaLabel="View unread only"
+        width="52px"
+        height="22px"
+        [(checked)]="isUnreadOnly"
+      >
+        View unread only
+      </tp-slide-toggle>
+    </header>
+
+    <tp-divider class="tt-bell-notification-menu__divider"></tp-divider>
+
+    @if (loading()) {
+      <div
+        class="tt-bell-notification-menu__loading-list"
+        aria-label="Loading notifications"
+        aria-busy="true"
+      >
+        @for (skeleton of skeletonItems; track skeleton; let last = $last) {
+          <div class="tt-bell-notification-menu__loading-item" aria-hidden="true">
+            <tp-skeleton variant="text" width="36%" height="10px"></tp-skeleton>
+            <tp-skeleton variant="rectangle" width="100%" height="36px"></tp-skeleton>
+          </div>
+
+          @if (!last) {
+            <tp-divider class="tt-bell-notification-menu__item-divider" mode="dash"></tp-divider>
+          }
+        }
+      </div>
+    } @else if (notifications().length === 0) {
+      <p class="tt-bell-notification-menu__empty">No notifications to display</p>
+    } @else {
+      <div class="tt-bell-notification-menu__list" aria-label="Notifications">
+        @for (
+          notification of notifications();
+          track notification.notificationId;
+          let last = $last
+        ) {
+          <article
+            class="tt-bell-notification-menu__item"
+            [class.tt-bell-notification-menu__item--interactive]="notification.isRead !== true"
+            [attr.role]="notification.isRead === true ? null : 'button'"
+            [attr.tabindex]="notification.isRead === true ? null : 0"
+            [attr.aria-label]="
+              notification.isRead === true
+                ? null
+                : 'Mark notification as read: ' + notification.title
+            "
+            (click)="markNotificationRead(notification)"
+            (keydown)="handleNotificationKeydown($event, notification)"
+          >
+            <div class="tt-bell-notification-menu__item-heading">
+              <h3>{{ notification.title }}</h3>
+              @if (!notification.isRead) {
+                <span class="tt-bell-notification-menu__unread-dot" aria-label="Unread"></span>
+              }
+            </div>
+
+            <p class="tt-bell-notification-menu__content">
+              <ng-container
+                [ngTemplateOutlet]="formatContent(notification)"
+                [ngTemplateOutletContext]="{ $implicit: notification }"
+              ></ng-container>
+            </p>
+
+            <div class="tt-bell-notification-menu__metadata">
+              <span>Sent at: {{ notification.sentAt | date: 'dd-MMM-yyyy HH:mm:ss' }}</span>
+              @if (notification.isRead && notification.readAt) {
+                <span>Read at: {{ notification.readAt | date: 'dd-MMM-yyyy HH:mm:ss' }}</span>
+              }
+            </div>
+          </article>
+
+          @if (!last) {
+            <tp-divider class="tt-bell-notification-menu__item-divider" mode="dash"></tp-divider>
+          }
+        }
+      </div>
+    }
+
+    <tp-divider class="tt-bell-notification-menu__divider"></tp-divider>
+
+    <footer class="tt-bell-notification-menu__footer">
+      <tp-text-button
+        class="tt-mark-read"
+        color="gray"
+        pressEffectShape="rect"
+        contentAlignment="start"
+        height="20px"
+        width="auto"
+        [disabled]="!canMarkAllRead()"
+        (onClick)="markAllRead.emit()"
+      >
+        Mark all read
+      </tp-text-button>
+
+      <a routerLink="/settings/notification-history" (click)="closeMenu()"> View all history </a>
+    </footer>
+  </div>
+</tp-popover-menu>
+
+<ng-template #defaultContentTemplate let-notification>
+  @if (exportFileId(notification)) {
+    {{ interpolateContentTemplate(notification).replace('Click here to download.', '') }}
+    <a href="#" (click)="downloadExport($event, notification)" (keydown)="$event.stopPropagation()">Click here to download.</a>
+  } @else {
+    {{ interpolateContentTemplate(notification) }}
+  }
+</ng-template>

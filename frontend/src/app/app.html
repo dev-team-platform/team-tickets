@@ -1,13 +1,14 @@
-<app-nav-bar
-  [sideBarCollapsed]="sideBarCollapsed()"
-  (sideBarToggle)="toggleSideBar()"
-></app-nav-bar>
-
 <div class="tt-app-shell">
-  <app-side-bar [collapsed]="sideBarCollapsed()"></app-side-bar>
+  <app-app-layout></app-app-layout>
 
-  <main class="tt-app-shell__content">
-    <router-outlet></router-outlet>
-    <div *appHasAccess="hasAccess()">You have access to this content.</div>
-  </main>
+  <tp-toast-notification-container
+    position="top-right"
+    pushMode="below"
+    toastDisplayMode="from-right"
+    [(toasts)]="toastService.toasts"
+  ></tp-toast-notification-container>
+</div>
+
+<div class="tt-screen-size-message" role="status" aria-live="polite">
+  Please use desktop or laptop for full view
 </div>

@@ -1,0 +1,25 @@
+@if (breadcrumbs().length > 0) {
+  <nav class="tt-breadcrumb" aria-label="Breadcrumb">
+    @for (item of breadcrumbs(); track $index; let isLast = $last) {
+      @if (!$first) {
+        <span class="material-symbols-outlined tt-breadcrumb__separator" aria-hidden="true">
+          chevron_right
+        </span>
+      }
+
+      @if (isLast || !item.url) {
+        <span
+          class="tt-breadcrumb__item"
+          [class.tt-breadcrumb__item--current]="isLast"
+          [attr.aria-current]="isLast ? 'page' : null"
+        >
+          {{ item.label }}
+        </span>
+      } @else {
+        <a class="tt-breadcrumb__item tt-breadcrumb__link" [routerLink]="item.url">
+          {{ item.label }}
+        </a>
+      }
+    }
+  </nav>
+}

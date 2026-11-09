@@ -1,18 +1,30 @@
 :host {
-  display: flex;
-  flex-direction: column;
-  height: 100dvh;
+  display: block;
+  min-height: 100vh;
 }
 
 .tt-app-shell {
-  display: flex;
-  flex: 1 1 auto;
-  min-height: 0;
+  min-height: 100vh;
+}
 
-  &__content {
-    flex: 1 1 auto;
-    min-width: 0;
-    overflow: auto;
-    background-color: var(--tp-color-surface);
+.tt-screen-size-message {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  top: 16px;
+  left: 16px;
+  margin: 0;
+  color: var(--tp-color-text-primary);
+  font-size: var(--tp-font-size-default);
+  line-height: 1.5;
+}
+
+@media (max-width: 1023.98px) {
+  .tt-app-shell {
+    display: none;
+  }
+
+  .tt-screen-size-message {
+    display: block;
   }
 }

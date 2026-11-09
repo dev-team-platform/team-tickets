@@ -1,0 +1,57 @@
+<tp-dialog
+  [(open)]="open"
+  [ariaLabel]="ariaLabel()"
+  [width]="width()"
+  [maxWidth]="maxWidth()"
+  [height]="height()"
+  [maxHeight]="maxHeight()"
+>
+  <div class="tt-title-dialog">
+    <header class="tt-title-dialog__header">
+      <h2 class="tt-title-dialog__title">
+        @if (titleTemplate(); as template) {
+          <ng-container [ngTemplateOutlet]="template"></ng-container>
+        } @else {
+          {{ titleText() }}
+        }
+      </h2>
+
+      <tp-text-button
+        class="tt-title-dialog__close"
+        color="gray"
+        pressEffectShape="circle"
+        hoverShape="circle"
+        width="32px"
+        height="32px"
+        tooltipTitle="Close dialog"
+        (onClick)="close()"
+      >
+        <span class="tp-icon material-symbols-outlined">close</span>
+      </tp-text-button>
+    </header>
+
+    <tp-divider
+      class="tt-title-dialog__divider"
+      [width]="width()"
+      [maxWidth]="maxWidth()"
+    ></tp-divider>
+
+    <section class="tt-title-dialog__body">
+      @if (bodyTemplate(); as template) {
+        <ng-container [ngTemplateOutlet]="template"></ng-container>
+      }
+    </section>
+
+    <tp-divider
+      class="tt-title-dialog__divider"
+      [width]="width()"
+      [maxWidth]="maxWidth()"
+    ></tp-divider>
+
+    <footer class="tt-title-dialog__footer">
+      @if (footerTemplate(); as template) {
+        <ng-container [ngTemplateOutlet]="template"></ng-container>
+      }
+    </footer>
+  </div>
+</tp-dialog>

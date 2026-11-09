@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { TpButton } from '@team-platform/ui';
 
@@ -7,6 +7,7 @@ import { TpButton } from '@team-platform/ui';
   imports: [TpButton],
   templateUrl: './not-found.html',
   styleUrl: './not-found.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotFound {
   private readonly router = inject(Router);

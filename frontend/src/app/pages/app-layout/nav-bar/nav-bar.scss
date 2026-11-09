@@ -1,0 +1,87 @@
+.tt-nav-bar {
+  display: grid;
+  grid-template-columns: minmax(15rem, 1fr) minmax(20rem, 40rem) auto minmax(15rem, 1fr);
+  align-items: center;
+  min-height: 64px;
+  gap: var(--tp-space-5);
+  padding: 0.5rem var(--tp-space-5);
+  background-color: var(--tp-color-surface-elevated);
+  border-bottom: 1px solid var(--tp-color-border);
+  box-shadow: var(--tp-shadow-sm);
+
+  &__start,
+  &__brand,
+  &__actions {
+    display: flex;
+    align-items: center;
+  }
+
+  &__start {
+    flex: 0 0 auto;
+    gap: var(--tp-space-3);
+    margin-left: var(--tp-space-4);
+  }
+
+  &__collapse-button {
+    display: inline-flex;
+  }
+
+  &__brand {
+    gap: var(--tp-space-2);
+    color: var(--tp-color-text-primary);
+    text-decoration: none;
+  }
+
+  &__logo {
+    display: block;
+    flex: 0 0 auto;
+    border-radius: var(--tp-radius-md);
+  }
+
+  &__name {
+    font-size: var(--tp-text-xl);
+    color: var(--tp-color-blue-500);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  &__search {
+    grid-column: 2;
+    min-width: 0;
+
+    tp-search-bar {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  &__create-button {
+    grid-column: 3;
+    margin-left: var(--tp-space-4);
+
+    :host ::ng-deep & .tp-button {
+      padding-left: var(--tp-space-2) !important;
+    }
+
+    :host ::ng-deep & .mdc-button__label {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: var(--tp-space-1);
+    }
+  }
+
+  &__actions {
+    grid-column: 4;
+    flex: 0 0 auto;
+    justify-self: end;
+    gap: var(--tp-space-4);
+    margin-right: var(--tp-space-4);
+  }
+}
+
+:host ::ng-deep .tt-nav-bar__collapse-button .tp-icon {
+  --tp-icon-size: 24px;
+}
