@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
@@ -11,8 +12,14 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/trannhanlv2004/team-tickets/internal/configs"
+	"github.com/trannhanlv2004/team-tickets/internal/config"
+	"github.com/trannhanlv2004/team-tickets/internal/feature/common/uow"
 )
+
+type testUnitOfWork struct{}
+
+func (testUnitOfWork) Execute(context.Context, func(uow.Repositories) error) error { return nil }
+func (testUnitOfWork) Shutdown(context.Context) error                              { return nil }
 
 func TestPublicHealthAndProtectedRoutes(t *testing.T) {
 	key, err := rsa.GenerateKey(rand.Reader, 2048)
@@ -24,7 +31,14 @@ func TestPublicHealthAndProtectedRoutes(t *testing.T) {
 	if err := os.WriteFile(keyPath, data, 0600); err != nil {
 		t.Fatal(err)
 	}
-	app, err := New(&configs.AppConfig{Port: 8000, Auth: configs.AuthConfig{InternalJWTIssuer: "issuer", InternalJWTAudience: "audience", InternalJWTPublicKeyPEMPath: keyPath}})
+	app, err := New(&config.AppConfig{
+		Port: 8000,
+		Auth: config.AuthConfig{
+			InternalJWTIssuer:           "issuer",
+			InternalJWTAudience:         "audience",
+			InternalJWTPublicKeyPEMPath: keyPath,
+		},
+	}, testUnitOfWork{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -41,7 +55,13 @@ func TestPublicHealthAndProtectedRoutes(t *testing.T) {
 }
 
 func TestNewRejectsInvalidAuthenticationConfiguration(t *testing.T) {
-	if _, err := New(&configs.AppConfig{}); err == nil {
+	if _, err := New(&config.AppConfig{}, testUnitOfWork{}); err == nil {
 		t.Fatal("expected missing authentication configuration to fail")
+	}
+}
+
+func TestNewRejectsMissingUnitOfWork(t *testing.T) {
+	if _, err := New(&config.AppConfig{}, nil); err == nil {
+		t.Fatal("expected missing unit of work to fail")
 	}
 }
